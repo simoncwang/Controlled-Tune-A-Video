@@ -365,3 +365,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(**OmegaConf.load(args.config))
+    
+# try using https://huggingface.co/spaces/fffiloni/ControlNet-Video/tree/main
