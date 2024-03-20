@@ -236,4 +236,5 @@ image_gallery, _ = process(canny_image=None,
 							global_strength=1)
 
 for i, img in enumerate(image_gallery):
-    Image.save(f'data/output{i}.png')
+    pilimg = Image.fromarray(img)
+    pilimg.save(f'data/output{i}.png')
