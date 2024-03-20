@@ -25,6 +25,7 @@ from annotator.content import ContentDetector
 from models.util import create_model, load_state_dict
 from models.ddim_hacked import DDIMSampler
 
+from PIL import Image
 
 apply_canny = CannyDetector()
 apply_mlsd = MLSDdetector()
@@ -205,4 +206,34 @@ with block:
     run_button.click(fn=process, inputs=ips, outputs=[image_gallery, cond_gallery])
 
 
-block.launch(server_name='0.0.0.0')
+# block.launch(server_name='127.0.0.1', share=True)
+depth = np.array(Image.open("../data/car-turn/depths/081.png"))
+hed = np.array(Image.open("../data/car-turn/lines/252.png"))
+content = np.array(Image.open("../data/car-turn/orig/00001.png"))
+image_gallery, _ = process(canny_image=None,
+							mlsd_image=None,
+							hed_image=hed,
+							sketch_image=None,
+							openpose_image=None,
+							midas_image=depth,
+							seg_image=None,
+							content_image=content,
+							prompt="A jeep is turning",
+							a_prompt='best quality, extremely detailed',
+							n_prompt='longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality',
+							num_samples=4,
+							image_resolution=512,
+							ddim_steps=50,
+							strength=1,
+							scale=7.5,
+							seed=42,
+							eta=0.0,
+							low_threshold=100,
+							high_threshold=100,
+							value_threshold=0.1,
+							distance_threshold=0.1,
+							alpha=6.2,
+							global_strength=1)
+
+for i, img in enumerate(image_gallery):
+    Image.save(f'data/output{i}.png')
